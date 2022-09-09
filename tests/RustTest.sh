@@ -36,6 +36,10 @@ cargo run $TARGET_FLAG -- --quiet
 check_test_result "Rust serde tests"
 
 cd ../rust_test_no_std_compilation
+readonly INSTALLED_TARGETS="$(rustup target list)"
+if [[ ! "$INSTALLED_TARGETS" == *"x86_64-unknown-none (installed)"* ]]; then
+  rustup target add x86_64-unknown-none
+fi
 cargo build
 check_test_result "Rust flatbuffers test no_std compilation"
 
