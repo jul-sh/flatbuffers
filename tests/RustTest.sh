@@ -36,7 +36,12 @@ cargo run $TARGET_FLAG -- --quiet
 check_test_result "Rust serde tests"
 
 cd ../rust_test_no_std_compilation
-cargo build
+readonly INSTALLED_NIGHTLY_TARGETS="$(rustup target list --installed --toolchain nightly)"
+readonly TEST_NO_STD_TARGET="wasm32-unknown-unknown"
+if [[ ! "${INSTALLED_NIGHTLY_TARGETS}" == *"${TEST_NO_STD_TARGET}"* ]]; then
+  rustup toolchain install nightly --target "${TEST_NO_STD_TARGET}"
+fi
+rustup run nightly cargo build
 check_test_result "Rust flatbuffers test no_std compilation"
 
 cd ../rust_usage_test
